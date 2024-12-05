@@ -1,0 +1,16 @@
+spring.application.name: Authentication_service
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:authdb
+    driver-class-name: org.h2.Driver
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
