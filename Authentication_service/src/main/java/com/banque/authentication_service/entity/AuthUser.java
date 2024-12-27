@@ -1,8 +1,7 @@
 package com.banque.authentication_service.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -10,14 +9,23 @@ import java.util.UUID;
 @Table(name = "auth_users")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthUser {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+
+    @Column(unique = true,nullable = false)
+    private UUID user_id;
 
     @Column(unique = true, nullable = false)
     private String username;
 
     @Column(unique = true, nullable = false)
     private String password; // Haché avec BCrypt
+
+    @Column(unique = true, nullable = false)
+    private String role;
 }
