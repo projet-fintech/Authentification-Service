@@ -1,0 +1,34 @@
+spring.application.name: Authentication_service
+
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/fintech_authentification
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+  kafka:
+    bootstrap-servers: localhost:9092 #adresse de mon serveur kafka
+    consumer:
+      group-id: auth-service
+      auto-offset-reset: earliest #Pour consommer les messages depuis le début si aucun offset n'est défini
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate: org.springframework.kafka.support.serializer.JsonDeserializer
+          json:
+            trusted:
+              packages: "*" #Autorise le package pour la désérialisation JSON
+    listener:
+      missing-topics-fatal: false
