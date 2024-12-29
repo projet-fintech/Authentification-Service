@@ -2,24 +2,24 @@ pipeline {
     agent any
     tools {
         maven 'Maven'
-         jdk 'JAVA21'
     }
     stages {
-       stage('Checkout') {
+        stage('Checkout') {
             steps {
                 checkout scmGit(
                     branches: [[name: '*/main']],
                     extensions: [],
                     userRemoteConfigs: [[credentialsId: 'ser3elah', url: 'https://github.com/projet-fintech/Authentification-Service.git']]
                 )
-            }
+             }
         }
-        stage('Building') {
-            steps {
-                dir('Authentication_service') { // Assure-toi que c'est le bon répertoire
-                    sh 'mvn clean install -DskipTests=true'
-                }
-            }
-            }
-        }
-    }
+         stage('Build Docker Image') {
+              steps {
+                  script {
+                      def dockerImage = "my-${JOB_NAME}"
+                      sh "docker build -t ${dockerImage}:${BUILD_NUMBER} ."
+                  }
+              }
+          }
+       }
+}
