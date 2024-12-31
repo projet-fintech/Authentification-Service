@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven 'maven'
         jdk 'Java'
-         docker 'Docker' // Use the configured docker tool
+        dockerTool 'Docker'' // Use the configured docker tool
     }
     stages {
         stage('Checkout') {
@@ -15,16 +15,24 @@ pipeline {
                 )
              }
         }
-        stage('Build Docker Image') {
+         stage('Prepare Dependencies') {
             steps {
-                withDockerContainer(toolName: 'docker',
-                        image:'openjdk:21-jdk-slim'
-                    ) {
-                   withEnv(["DOCKER_HOST" : "unix:///var/run/docker.sock","DOCKER_INSTALLED":"true"]) {
-                    sh "docker build -t my-${JOB_NAME}:${BUILD_NUMBER} ."
-                     }
-                   }
-              }
-         }
+                script {
+                    // Copier events-lib depuis le dossier shared-artifacts
+                    sh '''
+                        mkdir -p repo/com/banque/events-lib/1.0-SNAPSHOT
+                        cp /var/jenkins_home/shared-artifacts/repo/com/banque/events-lib/1.0-SNAPSHOT/events-lib-1.0-SNAPSHOT.jar ./events-lib-1.0-SNAPSHOT.jar
+                    '''
+                }
+            }
+        }
+         stage('Build Docker Image') {
+            steps {
+                script {
+                    def imageName = "authentification-microservice:${BUILD_NUMBER}"
+                    sh "docker build -t ${imageName} ."
+                }
+            }
+        }
        }
     }
