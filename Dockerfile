@@ -9,10 +9,9 @@ RUN mkdir -p repo/com/banque/events-lib/1.0-SNAPSHOT
 COPY events-lib-1.0-SNAPSHOT.jar repo/com/banque/events-lib/1.0-SNAPSHOT/
 
 # Copier les fichiers du projet
-COPY pom.xml ./Authentication_service
-COPY src ./Authentication_service/src
-
-
+# Comme vous êtes déjà dans le répertoire Authentication_service, modifiez les chemins
+COPY Authentication_service/pom.xml .
+COPY Authentication_service/src ./src
 
 # Build du projet
 RUN mvn clean install -DskipTests
