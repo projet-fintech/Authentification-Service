@@ -9,7 +9,7 @@ RUN mkdir -p repo/com/banque/events-lib/1.0-SNAPSHOT
 COPY events-lib-1.0-SNAPSHOT.jar repo/com/banque/events-lib/1.0-SNAPSHOT/
 
 # Copier les fichiers du projet
-COPY pom.xml .
+COPY pom.xml ./Authentication_service
 COPY src ./Authentication_service/src
 
 
