@@ -10,7 +10,9 @@ COPY events-lib-1.0-SNAPSHOT.jar repo/com/banque/events-lib/1.0-SNAPSHOT/
 
 # Copier les fichiers du projet
 COPY pom.xml .
-COPY src ./src
+COPY src ./Authentification-Service/src
+
+
 
 # Build du projet
 RUN mvn clean install -DskipTests
