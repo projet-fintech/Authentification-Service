@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven 'maven'
         jdk 'Java'
-        dockerTool 'Docker'' // Use the configured docker tool
+        dockerTool 'Docker' // Use the configured docker tool
     }
     stages {
         stage('Checkout') {
