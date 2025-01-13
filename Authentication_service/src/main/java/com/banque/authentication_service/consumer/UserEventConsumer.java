@@ -4,6 +4,8 @@ import com.banque.authentication_service.entity.AuthUser;
 import com.banque.events.UserEvent;
 import com.banque.authentication_service.repository.AuthUserRepository;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,9 +14,11 @@ import java.util.Optional;
 public class UserEventConsumer {
 
     private final AuthUserRepository authUserRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserEventConsumer(AuthUserRepository authUserRepository){
+    public UserEventConsumer(AuthUserRepository authUserRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.authUserRepository = authUserRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -27,7 +31,7 @@ public class UserEventConsumer {
                     AuthUser authUser = new AuthUser();
                     authUser.setUser_id(event.getId());
                     authUser.setUsername(event.getUsername());
-                    authUser.setPassword(event.getPassword());
+                    authUser.setPassword(bCryptPasswordEncoder.encode(event.getPassword()));
                     authUser.setRole(event.getRole());
                     authUserRepository.save(authUser);
                 }
@@ -37,7 +41,7 @@ public class UserEventConsumer {
                 authUserOptional.ifPresent(user ->{
                     if(!user.getUsername().equals(event.getUsername()) || !user.getPassword().equals(event.getPassword())){
                         user.setUsername(event.getUsername());
-                        user.setPassword(event.getPassword());
+                        user.setPassword(bCryptPasswordEncoder.encode(event.getPassword()));
                         authUserRepository.save(user);
                     }
                 });
