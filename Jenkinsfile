@@ -96,6 +96,19 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to EKS') {
+            steps {
+                script {
+                    withCredentials([aws(credentialsId: 'aws-credentials')]) {
+                        sh """
+                            aws eks --region ${AWS_REGION} update-kubeconfig --name your-eks-cluster-name
+                            kubectl apply -f kubernetes/deployment.yaml
+                            kubectl apply -f kubernetes/service.yaml
+                        """
+                    }
+                }
+            }
+        }
     }
     post {
         failure {
