@@ -4,7 +4,6 @@ import com.banque.authentication_service.entity.AuthUser;
 import com.banque.events.UserEvent;
 import com.banque.authentication_service.repository.AuthUserRepository;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,24 +13,24 @@ import java.util.Optional;
 public class UserEventConsumer {
 
     private final AuthUserRepository authUserRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserEventConsumer(AuthUserRepository authUserRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public UserEventConsumer(AuthUserRepository authUserRepository, BCryptPasswordEncoder passwordEncoder){
         this.authUserRepository = authUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     @KafkaListener(topics = "user-events", groupId = "auth-service")
     public void consume(UserEvent event) {
-        Optional<AuthUser> authUserOptional = authUserRepository.findById(event.getId());
+        Optional<AuthUser> authUserOptional = authUserRepository.findByUsername(event.getUsername());
         switch (event.getEventType()) {
             case "CREATED":
                 if(authUserOptional.isEmpty()){
                     AuthUser authUser = new AuthUser();
                     authUser.setUser_id(event.getId());
                     authUser.setUsername(event.getUsername());
-                    authUser.setPassword(bCryptPasswordEncoder.encode(event.getPassword()));
+                    authUser.setPassword(passwordEncoder.encode(event.getPassword()));
                     authUser.setRole(event.getRole());
                     authUserRepository.save(authUser);
                 }
@@ -41,7 +40,7 @@ public class UserEventConsumer {
                 authUserOptional.ifPresent(user ->{
                     if(!user.getUsername().equals(event.getUsername()) || !user.getPassword().equals(event.getPassword())){
                         user.setUsername(event.getUsername());
-                        user.setPassword(bCryptPasswordEncoder.encode(event.getPassword()));
+                        user.setPassword(passwordEncoder.encode(event.getPassword()));
                         authUserRepository.save(user);
                     }
                 });

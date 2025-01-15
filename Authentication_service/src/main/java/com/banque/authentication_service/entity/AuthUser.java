@@ -26,6 +26,6 @@ public class AuthUser {
     @Column(unique = true, nullable = false)
     private String password; // Haché avec BCrypt
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String role;
 }
