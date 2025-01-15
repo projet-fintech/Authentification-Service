@@ -96,7 +96,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to EKS') {
+        /*stage('Deploy to EKS') {
             steps {
                 script {
                     withCredentials([aws(credentialsId: 'aws-credentials')]) {
@@ -108,7 +108,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
     post {
         failure {
