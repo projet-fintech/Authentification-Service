@@ -50,6 +50,7 @@ stage('SonarQube Analysis') {
                 script {
                     withSonarQubeEnv('sonarqube') {
                         sh """
+                        cd Authentication_service
                         mvn sonar:sonar -X \
                             -Dsonar.projectKey=${COMPONENT_NAME}-project \
                             -Dsonar.sources=src/main/java \
