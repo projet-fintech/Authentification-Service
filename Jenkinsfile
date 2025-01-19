@@ -11,7 +11,7 @@ pipeline {
         IMAGE_NAME = 'authentication-microservice'
           COMPONENT_NAME = 'AUTH'
           SONAR_TOKEN = '39cc334a0a13dc54d616ab48a6949fae534f6b15'
-          SONAR_HOST = 'http://192.168.0.147:9000'
+          SONAR_HOST = 'http://192.168.0.66:9000'
     }
     stages {
         stage('Checkout') {
