@@ -1,5 +1,9 @@
 Architecture : Auth Service avec base de données des utilisateurs
 
+
+![image](https://github.com/user-attachments/assets/7e714c6c-a28b-4820-89f7-8ba126338209)
+
+
     Données stockées dans Auth Service :
     Auth Service stocke uniquement les informations nécessaires à l'authentification :
         username
