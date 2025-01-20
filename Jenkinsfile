@@ -7,7 +7,7 @@ pipeline {
     }
     environment {
         AWS_REGION = 'eu-west-3'
-        ECR_REGISTRY = '329599629502.dkr.ecr.eu-west-3.amazonaws.com'
+        ECR_REGISTRY = {ecr_registry}
         IMAGE_NAME = 'authentication-microservice'
           COMPONENT_NAME = 'AUTH'
           SONAR_TOKEN = '39cc334a0a13dc54d616ab48a6949fae534f6b15'
