@@ -64,7 +64,7 @@ stage('SonarQube Analysis') {
                 }
             }
         }
-         /* stage('Build Docker Image') {
+          stage('Build Docker Image') {
             steps {
                 script {
                     def localImageName = "${IMAGE_NAME}:${BUILD_NUMBER}"
@@ -117,19 +117,19 @@ stage('SonarQube Analysis') {
                 }
             }
         }
-        /*stage('Deploy to EKS') {
+        stage('Deploy to EKS') {
             steps {
                 script {
                     withCredentials([aws(credentialsId: 'aws-credentials')]) {
                         sh """
-                            aws eks --region ${AWS_REGION} update-kubeconfig --name your-eks-cluster-name
-                            kubectl apply -f kubernetes/deployment.yaml
-                            kubectl apply -f kubernetes/service.yaml
+                            aws eks --region ${AWS_REGION} update-kubeconfig --name main-eks-cluster
+                            kubectl apply -f kubernetes/authentification-deployement.yaml
+                            kubectl apply -f kubernetes/authentification-service.yaml
                         """
                     }
                 }
             }
-        }*/
+        }
     }
     post {
         failure {
